@@ -14,9 +14,15 @@ public class DataShredderService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DataShredderService.class);
 
+    public boolean validateAppProperties() {
+
+        return appProperties.validateTargetPath();
+
+    }
+
     public void printAppProperties() {
 
-        LOGGER.info("printAppProperties(): AppProperties: " + appProperties);
+        LOGGER.info("printAppProperties() - AppProperties: \n" + appProperties);
 
     }
 

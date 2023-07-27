@@ -16,6 +16,8 @@ public class App implements CommandLineRunner {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(App.class);
 
+    private boolean isAppPropertiesValid;
+
     public static void main(String[] args) {
 
         App app = new App();
@@ -34,26 +36,61 @@ public class App implements CommandLineRunner {
 
     }
 
+    @Override
+    public void run(String... args) {
+
+        LOGGER.info("\n\n");
+        LOGGER.info("run() - Begin.");
+
+        init();
+
+        validate();
+
+        if (!isAppPropertiesValid) return;
+
+        mainController.start();
+
+        LOGGER.info("run() - End.\n");
+
+    }
+
     private void init() {
 
         //  For Any Pre-processing / Initialization
 
     }
 
-    @Override
-    public void run(String... args) {
+    private void validate() {
 
-        init();
-        mainController.start();
+        validateApplicationProperties();
+
+    }
+
+    private void validateApplicationProperties() {
+
+        LOGGER.info("validateApplicationProperties() - Begin.");
+
+        String strValidationSuccessMsg = "Validation Successful..!! ^-^";
+        String strValidationFailureMsg = "application.properties file is INVALID. PROGRAM TERMINATED..!!";
+
+        isAppPropertiesValid = mainController.validateApplicationProperties();
+
+        if (!isAppPropertiesValid) LOGGER.error("validateApplicationProperties() - " + strValidationFailureMsg);
+        else LOGGER.error("validateApplicationProperties() - " + strValidationSuccessMsg);
+
+        LOGGER.info("validateApplicationProperties() - End.");
 
     }
 
 }
 
 /*
- *  Time Stamp  :   27th Jul. 2K23 - 12:45 PM..!!
+ *  Date Created    :   27th Jul. 2K23 - 12:45 PM..!!
+ *  last Modified   :   27th Jul. 2K23 - 02:01 PM..!!
  *
  *  Change Log:
+ *
+ *  2nd Commit - Validate application.properties
  *
  *  Init Commit - Establish Base Using Spring Boot
  *

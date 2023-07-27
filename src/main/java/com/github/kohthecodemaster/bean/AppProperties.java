@@ -1,16 +1,20 @@
 package com.github.kohthecodemaster.bean;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
 
 @Component
 public class AppProperties {
 
+    @Value("${targetPath}")
     private String targetPath;
 
-//    @Value("flagDamageEntireFile")
+    @Value("${flagDamageEntireFile}")
     private boolean flagDamageEntireFile;
 
-//    @Value("flagDeleteFilesAfterShredding")
+    @Value("${flagDeleteFilesAfterShredding}")
     private boolean flagDeleteFilesAfterShredding;
 
     public AppProperties() {
@@ -18,11 +22,15 @@ public class AppProperties {
 
     @Override
     public String toString() {
-        return "AppProperties{" +
-                "targetFile=" + targetPath +
-                ", flagDamageEntireFile=" + flagDamageEntireFile +
-                ", flagDeleteFilesAfterShredding=" + flagDeleteFilesAfterShredding +
-                '}';
+        return "targetFile: " + targetPath + "\n" +
+                "flagDamageEntireFile: " + flagDamageEntireFile + "\n" +
+                "flagDeleteFilesAfterShredding: " + flagDeleteFilesAfterShredding;
     }
 
+    public boolean validateTargetPath() {
+
+        //  Check targetPath is valid File/Dir Path
+        return targetPath != null && !targetPath.equals("") && new File(targetPath).exists();
+
+    }
 }

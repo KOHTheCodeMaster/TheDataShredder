@@ -18,6 +18,12 @@ public class MainController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
+    public boolean validateApplicationProperties() {
+
+        return dataShredderService.validateAppProperties();
+
+    }
+
     public void start() {
 
         LOGGER.info("start() - Begin.");
@@ -30,5 +36,4 @@ public class MainController {
         LOGGER.info("stop() - End.");
 
     }
-
 }
