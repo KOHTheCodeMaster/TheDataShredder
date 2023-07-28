@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="89c8e4cc-cadd-4abd-b6c4-8de5df84fbe6" name="Changes" comment="Init Commit - Establish Base Using Spring Boot">
+    <list default="true" id="89c8e4cc-cadd-4abd-b6c4-8de5df84fbe6" name="Changes" comment="2nd Commit - Validate application.properties">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/bean/FileToShredBean.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/ConstantHelper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/FileToShredBeanFactory.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/TheDataShredder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/bean/AppProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/bean/AppProperties.java" afterDir="false" />
@@ -34,6 +38,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Harshit Gupta &lt;kohthecodemaster@gmail.com&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
@@ -110,7 +119,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690444366611</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="2nd Commit - Validate application.properties">
+      <created>1690446709611</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1690446709611</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -126,6 +142,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Init Commit - Establish Base Using Spring Boot" />
-    <option name="LAST_COMMIT_MESSAGE" value="Init Commit - Establish Base Using Spring Boot" />
+    <MESSAGE value="2nd Commit - Validate application.properties" />
+    <option name="LAST_COMMIT_MESSAGE" value="2nd Commit - Validate application.properties" />
   </component>
 </project>

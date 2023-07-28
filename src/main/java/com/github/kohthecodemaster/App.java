@@ -45,7 +45,6 @@ public class App implements CommandLineRunner {
         init();
 
         validate();
-
         if (!isAppPropertiesValid) return;
 
         mainController.start();
@@ -86,9 +85,11 @@ public class App implements CommandLineRunner {
 
 /*
  *  Date Created    :   27th Jul. 2K23 - 12:45 PM..!!
- *  last Modified   :   27th Jul. 2K23 - 02:01 PM..!!
+ *  last Modified   :   28th Jul. 2K23 - 01:11 PM..!!
  *
  *  Change Log:
+ *
+ *  3rd Commit - FileToShredBean Added
  *
  *  2nd Commit - Validate application.properties
  *

@@ -11,6 +11,12 @@ public class AppProperties {
     @Value("${targetPath}")
     private String targetPath;
 
+    @Value("${minFileSizeDeleteThresholdInMB}")
+    private Integer minFileSizeDeleteThresholdInMB;
+
+    @Value("${bufferSizeInMB}")
+    private Integer bufferSizeInMB;
+
     @Value("${flagDamageEntireFile}")
     private boolean flagDamageEntireFile;
 
@@ -22,7 +28,9 @@ public class AppProperties {
 
     @Override
     public String toString() {
-        return "targetFile: " + targetPath + "\n" +
+        return "targetPath: " + targetPath + "\n" +
+                "minFileSizeDeleteThresholdInMB: " + minFileSizeDeleteThresholdInMB + "\n" +
+                "bufferSizeInMB: " + bufferSizeInMB + "\n" +
                 "flagDamageEntireFile: " + flagDamageEntireFile + "\n" +
                 "flagDeleteFilesAfterShredding: " + flagDeleteFilesAfterShredding;
     }
@@ -32,5 +40,25 @@ public class AppProperties {
         //  Check targetPath is valid File/Dir Path
         return targetPath != null && !targetPath.equals("") && new File(targetPath).exists();
 
+    }
+
+    public String getTargetPath() {
+        return targetPath;
+    }
+
+    public Integer getMinFileSizeDeleteThresholdInMB() {
+        return minFileSizeDeleteThresholdInMB;
+    }
+
+    public Integer getBufferSizeInMB() {
+        return bufferSizeInMB;
+    }
+
+    public boolean isFlagDamageEntireFile() {
+        return flagDamageEntireFile;
+    }
+
+    public boolean isFlagDeleteFilesAfterShredding() {
+        return flagDeleteFilesAfterShredding;
     }
 }

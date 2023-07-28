@@ -29,11 +29,10 @@ public class MainController {
         LOGGER.info("start() - Begin.");
         myTimer.startTimer();
 
-        dataShredderService.printAppProperties();
-
+        dataShredderService.start();
 
         myTimer.stopTimer(true);
-        LOGGER.info("stop() - End.");
+        LOGGER.info("start() - End.");
 
     }
 }
