@@ -4,21 +4,36 @@ import java.io.File;
 
 public class FileToShredBean {
 
-    private final File targetFile;
+    private final File file;
     private final long fileLength;
     private long filePointer;
+    private boolean isSmallerThanBuffer;
 
-    public FileToShredBean(File targetFile) {
-        this.targetFile = targetFile;
-        this.fileLength = targetFile.length();
+    public FileToShredBean(File file) {
+        this.file = file;
+        this.fileLength = file.length();
     }
 
     @Override
     public String toString() {
-        return "targetFile: " + targetFile + "\n" +
+        return "file: " + file + "\n" +
                 "fileLength: " + fileLength + "\n" +
                 "filePointer: " + filePointer + "\n";
     }
 
+    public File getFile() {
+        return file;
+    }
 
+    public long getFilePointer() {
+        return filePointer;
+    }
+
+    public void setFilePointer(long filePointer) {
+        this.filePointer = filePointer;
+    }
+
+    public long getFileLength() {
+        return fileLength;
+    }
 }

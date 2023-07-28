@@ -89,6 +89,8 @@ public class App implements CommandLineRunner {
  *
  *  Change Log:
  *
+ *  4th Commit - Shredding Single File
+ *
  *  3rd Commit - FileToShredBean Added
  *
  *  2nd Commit - Validate application.properties

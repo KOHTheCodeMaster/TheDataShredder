@@ -10,18 +10,19 @@ import stdlib.utils.MyTimer;
 @Controller
 public class MainController {
 
-    @Autowired
-    private DataShredderService dataShredderService;
-
-    @Autowired
-    private MyTimer myTimer;
+    private final DataShredderService dataShredderService;
+    private final MyTimer myTimer;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
+    @Autowired
+    public MainController(DataShredderService dataShredderService, MyTimer myTimer) {
+        this.dataShredderService = dataShredderService;
+        this.myTimer = myTimer;
+    }
+
     public boolean validateApplicationProperties() {
-
         return dataShredderService.validateAppProperties();
-
     }
 
     public void start() {
