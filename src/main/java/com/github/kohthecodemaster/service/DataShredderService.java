@@ -3,16 +3,19 @@ package com.github.kohthecodemaster.service;
 import com.github.kohthecodemaster.bean.AppProperties;
 import com.github.kohthecodemaster.bean.FileToShredBean;
 import com.github.kohthecodemaster.utils.ConstantHelper;
+import com.github.kohthecodemaster.utils.DirTreeWalker;
 import com.github.kohthecodemaster.utils.FileToShredBeanFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import stdlib.utils.KOHFilesUtil;
+import stdlib.utils.DirFilesCounter;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.util.function.Consumer;
 
 @Service
 public class DataShredderService {
@@ -54,21 +57,20 @@ public class DataShredderService {
 
         File targetFile = new File(appProperties.getTargetPath());
 
-        if (targetFile.isFile()) {
-            FileToShredBean fileToShredBean = FileToShredBeanFactory.getFileToShredBean(appProperties.getTargetPath());
-            processSingleFile(fileToShredBean, appProperties.isFlagDeleteFilesAfterShredding());
-        }
-//        else if (targetFile.isDirectory()) shredTheDirectory();
+        if (targetFile.isFile())
+            processSingleFile(FileToShredBeanFactory.getFileToShredBean(appProperties.getTargetPath(), true));
+        else if (targetFile.isDirectory()) processDirectory(targetFile);
         else LOGGER.error("beginShredding() - INVALID Target File Path: " + appProperties.getTargetPath());
 
     }
 
-    private void processSingleFile(FileToShredBean fileToShredBean, boolean flagDeleteFilesAfterShredding) {
+    private void processSingleFile(FileToShredBean fileToShredBean) {
 
         //  TODO : Abstract Print Logs when Shredding Files
 
         File currentFile = fileToShredBean.getFile();
 
+        LOGGER.info("processSingleFile() - Starts.");
         LOGGER.info("Currently Processing: [" + currentFile.getAbsolutePath() + "]");
 
         try (RandomAccessFile raf = new RandomAccessFile(currentFile, "rwd")) {
@@ -88,13 +90,10 @@ public class DataShredderService {
                     fileToShredBean.setFilePointer(tempSmallBuffer.length);
 
                 } else {
-
                     shredEntireFile(raf, fileToShredBean);
-
                 }
 
                 LOGGER.info("File [" + currentFile.getAbsolutePath() + "] Shredded Successfully.");
-
 
             } else {
                 //  Otherwise, Damage DMG_PERCENTAGE % of the File
@@ -102,6 +101,7 @@ public class DataShredderService {
 //                damageMajorFileSegment(raf);
             }
         } catch (IOException e) {
+            // TODO: 29-07-2023 - Handle Error Logs & Flags appropriately
             e.printStackTrace();
             LOGGER.error("I/O Exception Occurred!\nProgram Terminated...");
         } catch (InterruptedException e) {
@@ -109,11 +109,7 @@ public class DataShredderService {
             LOGGER.error("Interrupted Exception Occurred!\nProgram Terminated...");
         }
 
-
-        if (flagDeleteFilesAfterShredding) {
-            if (!KOHFilesUtil.deleteFileNow(currentFile))
-                LOGGER.error("Unable to Shred File : [" + currentFile.getAbsolutePath() + "]\t|\tShredding Failed..!!\n");
-        }
+        LOGGER.info("processSingleFile() - Ends.");
 
     }
 
@@ -121,7 +117,8 @@ public class DataShredderService {
 
         byte[] buffer = new byte[bufferLength];
 
-        System.out.println("\nCurrently Processing : [" + fileToShredBean.getFile().getAbsolutePath() + "]");
+        LOGGER.info("shredEntireFile() - Starts.");
+        LOGGER.info("Currently Processing : [" + fileToShredBean.getFile().getAbsolutePath() + "]");
 
         Runnable runnable = () -> {
             /*
@@ -144,7 +141,7 @@ public class DataShredderService {
                 }
             }
             System.out.print("\b\b\b");
-            System.out.println("100%\nFile Shredded Successfully!");
+            LOGGER.info("100%\nFile Shredded Successfully!");
 
         };
         Thread displayPercentageThread = new Thread(runnable);
@@ -183,34 +180,37 @@ public class DataShredderService {
 
         Thread.sleep(20);
 
-        long tempFilePointer = fileToShredBean.getFilePointer() + buffer.length * 2L;
-        fileToShredBean.setFilePointer(tempFilePointer);
+//        long tempFilePointer = fileToShredBean.getFilePointer() + buffer.length * 2L;
+//        fileToShredBean.setFilePointer(tempFilePointer);
 
         displayPercentageThread.join();
+
+        LOGGER.info("shredEntireFile() - Ends.");
 
     }
 
 
-    /*private void processDirectory() {
+    private void processDirectory(File targetDirToShred) {
 
         DirFilesCounter dirFilesCounter = new DirFilesCounter();
-        Files.walkFileTree(targetFile.toPath(), dirFilesCounter);
+        try {
 
-        origFileCount = dirFilesCounter.getFileCount();
+            Files.walkFileTree(targetDirToShred.toPath(), dirFilesCounter);
 
-        TheDataShredder.DirTreeWalker dirTreeWalker = new TheDataShredder.DirTreeWalker();
-        Files.walkFileTree(targetFile.toPath(), dirTreeWalker);
+            long origFileCount = dirFilesCounter.getFileCount();
+            LOGGER.info("origFileCount: " + origFileCount);
 
-        LOGGER.info("\nFiles Destroyed : " + dirTreeWalker.filesCount);
-        LOGGER.info("Dirs. Visited : " + dirTreeWalker.dirsCount);
-        LOGGER.info("Failed to Destroy : " + dirTreeWalker.failureCount);
-        LOGGER.info("Deleted Files Count : " + dirTreeWalker.deletedFilesCount);
+            Consumer<FileToShredBean> fileToShredBeanConsumer = this::processSingleFile;
 
-        //  Display list of files' absolute path
-        if (listCode != 0)
-            dirTreeWalker.displayLists(listCode);
+            DirTreeWalker dirTreeWalker = new DirTreeWalker(fileToShredBeanConsumer, appProperties.isFlagDeleteFilesAfterShredding(), origFileCount);
+            Files.walkFileTree(targetDirToShred.toPath(), dirTreeWalker);
 
-    }*/
+            dirTreeWalker.displayCounts();
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }

@@ -8,11 +8,21 @@ public class FileToShredBean {
     private final long fileLength;
     private long filePointer;
     private boolean isSmallerThanBuffer;
+    private final FileStatusFlagBean fileStatusFlagBean;
 
     public FileToShredBean(File file) {
         this.file = file;
         this.fileLength = file.length();
+        this.fileStatusFlagBean = new FileStatusFlagBean();
     }
+
+    public FileToShredBean(File file, boolean isFile) {
+        this.file = file;
+        this.fileLength = file.length();
+        this.fileStatusFlagBean = new FileStatusFlagBean();
+        this.fileStatusFlagBean.setFile(isFile);
+    }
+
 
     @Override
     public String toString() {
@@ -35,5 +45,9 @@ public class FileToShredBean {
 
     public long getFileLength() {
         return fileLength;
+    }
+
+    public FileStatusFlagBean getFileStatusFlagBean() {
+        return fileStatusFlagBean;
     }
 }

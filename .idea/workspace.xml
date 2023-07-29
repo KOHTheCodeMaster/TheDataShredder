@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="89c8e4cc-cadd-4abd-b6c4-8de5df84fbe6" name="Changes" comment="3rd Commit - FileToShredBean Added&#10;&#10;Signed-off-by: Harshit Gupta &lt;kohthecodemaster@gmail.com&gt;">
+    <list default="true" id="89c8e4cc-cadd-4abd-b6c4-8de5df84fbe6" name="Changes" comment="4th Commit - Shredding Single File">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/bean/FileStatusFlagBean.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/DirTreeWalker.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/TheDataShredder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/bean/FileToShredBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/bean/FileToShredBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/controller/MainController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/service/DataShredderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/service/DataShredderService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/FileToShredBeanFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/FileToShredBeanFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
@@ -143,7 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690530088718</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="4th Commit - Shredding Single File">
+      <created>1690535967948</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1690535967948</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -162,6 +171,7 @@
     <MESSAGE value="2nd Commit - Validate application.properties" />
     <MESSAGE value="3rd Commit - FileToShredBean Added" />
     <MESSAGE value="3rd Commit - FileToShredBean Added&#10;&#10;Signed-off-by: Harshit Gupta &lt;kohthecodemaster@gmail.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="3rd Commit - FileToShredBean Added&#10;&#10;Signed-off-by: Harshit Gupta &lt;kohthecodemaster@gmail.com&gt;" />
+    <MESSAGE value="4th Commit - Shredding Single File" />
+    <option name="LAST_COMMIT_MESSAGE" value="4th Commit - Shredding Single File" />
   </component>
 </project>

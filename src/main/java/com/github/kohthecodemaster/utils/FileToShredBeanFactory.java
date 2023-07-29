@@ -12,4 +12,10 @@ public class FileToShredBeanFactory {
 
     }
 
+    public static FileToShredBean getFileToShredBean(String filePath, boolean isFile) {
+
+        return new FileToShredBean(new File(filePath), isFile);
+
+    }
+
 }
