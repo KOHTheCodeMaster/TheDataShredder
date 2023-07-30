@@ -75,7 +75,7 @@ public class App implements CommandLineRunner {
         isAppPropertiesValid = mainController.validateApplicationProperties();
 
         if (!isAppPropertiesValid) LOGGER.error("validateApplicationProperties() - " + strValidationFailureMsg);
-        else LOGGER.error("validateApplicationProperties() - " + strValidationSuccessMsg);
+        else LOGGER.info("validateApplicationProperties() - " + strValidationSuccessMsg);
 
         LOGGER.info("validateApplicationProperties() - End.");
 
@@ -88,6 +88,8 @@ public class App implements CommandLineRunner {
  *  last Modified   :   29th Jul. 2K23 - 05:58 PM..!!
  *
  *  Change Log:
+ *
+ *  6th Commit - Added Total Size Validation
  *
  *  5th Commit - Process Shredding Directory Tree
  *

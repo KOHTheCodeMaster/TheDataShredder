@@ -80,18 +80,8 @@ public class DataShredderService {
 
             if (appProperties.isFlagDamageEntireFile() || (currentFile.length() < deleteThresholdInBytes)) {
 
-                //  When file to shred is Smaller than Buffer length,
-                if (fileToShredBean.getFileLength() < bufferLength) {
-
-                    //  Shred Small File by using small temp buffer of current file length
-                    byte[] tempSmallBuffer = new byte[(int) fileToShredBean.getFileLength()];
-                    raf.seek(0);  //  Initially already at 0
-//                    raf.write(tempSmallBuffer);
-                    fileToShredBean.setFilePointer(tempSmallBuffer.length);
-
-                } else {
-                    shredEntireFile(raf, fileToShredBean);
-                }
+                if (fileToShredBean.getFileLength() < bufferLength) shredFileWithoutBuffer(raf, fileToShredBean);
+                else shredEntireFileWithBuffer(raf, fileToShredBean);
 
                 LOGGER.info("File [" + currentFile.getAbsolutePath() + "] Shredded Successfully.");
 
@@ -113,7 +103,20 @@ public class DataShredderService {
 
     }
 
-    private void shredEntireFile(RandomAccessFile raf, FileToShredBean fileToShredBean) throws IOException, InterruptedException {
+    /**
+     * When file to shred is Smaller than Buffer length, Use Small Buffer of size = file length
+     */
+    private void shredFileWithoutBuffer(RandomAccessFile raf, FileToShredBean fileToShredBean) throws IOException {
+
+        //  Shred Small File by using small temp buffer of current file length
+        byte[] tempSmallBuffer = new byte[(int) fileToShredBean.getFileLength()];
+        raf.seek(0);  //  Initially already at 0
+        raf.write(tempSmallBuffer);
+        fileToShredBean.setFilePointer(tempSmallBuffer.length);
+
+    }
+
+    private void shredEntireFileWithBuffer(RandomAccessFile raf, FileToShredBean fileToShredBean) throws IOException, InterruptedException {
 
         byte[] buffer = new byte[bufferLength];
 
@@ -121,13 +124,6 @@ public class DataShredderService {
         LOGGER.info("Currently Processing : [" + fileToShredBean.getFile().getAbsolutePath() + "]");
 
         Runnable runnable = () -> {
-            /*
-                Time Stamp : 22nd August 2K19, 12:56 AM..!!
-                sharedCurrentFilePointer -> value of i i.e. current Pos.
-                        Following Condition :
-                (sharedCurrentFilePointer + buffer.length > fileLength) == true
-                only when the Main Thread has completed the Processing.
-             */
             while (fileToShredBean.getFilePointer() + buffer.length < fileToShredBean.getFileLength()) {
                 System.out.print((fileToShredBean.getFilePointer() * 100 / fileToShredBean.getFileLength()) + "%");
 
@@ -192,24 +188,69 @@ public class DataShredderService {
 
     private void processDirectory(File targetDirToShred) {
 
+        LOGGER.info("processDirectory() - Starts.");
+
         DirFilesCounter dirFilesCounter = new DirFilesCounter();
         try {
 
             Files.walkFileTree(targetDirToShred.toPath(), dirFilesCounter);
 
             long origFileCount = dirFilesCounter.getFileCount();
+            long origTotalSize = dirFilesCounter.getTotalSize();
             LOGGER.info("origFileCount: " + origFileCount);
 
             Consumer<FileToShredBean> fileToShredBeanConsumer = this::processSingleFile;
 
-            DirTreeWalker dirTreeWalker = new DirTreeWalker(fileToShredBeanConsumer, appProperties.isFlagDeleteFilesAfterShredding(), origFileCount);
+            DirTreeWalker dirTreeWalker = new DirTreeWalker(
+                    fileToShredBeanConsumer,
+                    appProperties.isFlagDeleteFilesAfterShredding(),
+                    origFileCount,
+                    origTotalSize);
             Files.walkFileTree(targetDirToShred.toPath(), dirTreeWalker);
 
-            dirTreeWalker.displayCounts();
+            LOGGER.info("processDirectory() - Walking Directory Completed.");
+
+            String strOrigCountSummary = dirFilesCounter.getCounterSummary();
+            String strFilesShreddedCountSummary = dirTreeWalker.getFilesShreddedCountSummary();
+            LOGGER.info("Original " + strOrigCountSummary);
+            LOGGER.info("Files Shredded Count Summary:\n" + strFilesShreddedCountSummary);
+
+            boolean isShreddingSuccessful = validateShreddingStatus(origFileCount,
+                    origTotalSize,
+                    dirTreeWalker.getFilesShreddedCount(),
+                    dirTreeWalker.getTotalSize());
+
+            if (isShreddingSuccessful) LOGGER.info("processDirectory() - Shredding Status - Success..!!");
+            else LOGGER.error("processDirectory() - Shredding Status - Failed..!!");
 
         } catch (IOException e) {
+
+            LOGGER.error("processDirectory() - Shredding Failed due to IO Exception.\nError Msg.: " + e.getMessage());
             throw new RuntimeException(e);
+
         }
+
+        LOGGER.info("processDirectory() - Ends.");
+
+    }
+
+    private boolean validateShreddingStatus(long origFileCount, long origTotalSize, long filesShreddedCount, long totalSize) {
+
+        boolean shreddingSuccessful = false;
+
+        // Validate Files Count After Shredding
+        if (origFileCount != filesShreddedCount)
+            LOGGER.error("checkFilesCountAfterShredding() - Post Shredding Check Passed Failed due to Files Count Mismatch." +
+                    "Orig Files Count: " + origFileCount + " | Files Shredded Count: " + filesShreddedCount);
+        else if (origTotalSize != totalSize)
+            LOGGER.error("checkFilesCountAfterShredding() - Post Shredding Check Passed Failed due to Total Size Mismatch." +
+                    "Orig Total Size: " + origTotalSize + " | Files Shredded Total Size: " + totalSize);
+        else {
+            shreddingSuccessful = true;
+            LOGGER.info("checkFilesCountAfterShredding() - Post Shredding Check Passed.");
+        }
+
+        return shreddingSuccessful;
 
     }
 

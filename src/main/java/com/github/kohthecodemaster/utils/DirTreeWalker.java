@@ -3,6 +3,7 @@ package com.github.kohthecodemaster.utils;
 import com.github.kohthecodemaster.bean.FileToShredBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import stdlib.pojos.FileSizePojo;
 import stdlib.utils.KOHFilesUtil;
 import stdlib.utils.KOHStringUtil;
 
@@ -17,12 +18,15 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DirTreeWalker.class);
 
-    long filesCount;
     long origFileCount;
+    long origTotalSize;
+    long filesShreddedCount;
+    long totalSize;
     long dirsCount;
     long failureCount;
     int deletedFilesCount;
     boolean shouldDeleteFiles;
+
     //    List<String> listOfFilesFailedToShred = new ArrayList<>();  //  Both Files & Dirs
 //    List<String> listOfFilesShredded = new ArrayList<>();
     List<FileToShredBean> fileToShredBeanList;
@@ -30,20 +34,20 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
     //    FileToShredBean fileToShredBean;
     Consumer<FileToShredBean> fileToShredBeanConsumer;
 
-    public DirTreeWalker(Consumer<FileToShredBean> fileToShredBeanConsumer, boolean shouldDeleteFiles, long origFileCount) {
+    public DirTreeWalker(Consumer<FileToShredBean> fileToShredBeanConsumer, boolean shouldDeleteFiles, long origFileCount, long origTotalSize) {
         this.fileToShredBeanConsumer = fileToShredBeanConsumer;
         this.shouldDeleteFiles = shouldDeleteFiles;
         this.origFileCount = origFileCount;
+        this.origTotalSize = origTotalSize;
         this.fileToShredBeanList = new ArrayList<>();
     }
 
-    public void displayCounts() {
+    public String getFilesShreddedCountSummary() {
 
-        LOGGER.info("origFileCount: " + origFileCount);
-        LOGGER.info("filesCount: " + filesCount);
-        LOGGER.info("dirsCount: " + dirsCount);
-        LOGGER.info("failureCount: " + failureCount);
-        LOGGER.info("dirsCount: " + dirsCount);
+        return "Files - " + filesShreddedCount + "\n" +
+                "Dirs. - " + dirsCount + "\n" +
+                "Failed Files - " + failureCount + "\n" +
+                "Total Size - " + FileSizePojo.acquireFileSizePojo(totalSize);
 
     }
 
@@ -52,12 +56,13 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
         boolean validFlag = true;
 
         //  Avoiding Re-traversal of dir tree due to renaming of files
-        if (filesCount > origFileCount) {
+        if (filesShreddedCount > origFileCount || totalSize > origTotalSize) {
 
             validFlag = false;
 
-            LOGGER.warn("Files Count Changed possibly due to Renaming/Moving files. Program Terminating...");
-            LOGGER.warn("filesCount: " + filesCount + " | origFileCount: " + origFileCount);
+            LOGGER.error("validFilesCountIntegrity() - Files Count Changed possibly due to Renaming/Moving files. Program Terminating...");
+            LOGGER.error("filesShreddedCount: " + filesShreddedCount + " | origFileCount: " + origFileCount);
+            LOGGER.error("totalSize: " + totalSize + " | origTotalSize: " + origTotalSize);
 
             // TODO: 29-07-2023 - Replace toAbsolutePath with toRealPath along with proper exception handling
             FileToShredBean fileToShredBean = FileToShredBeanFactory.getFileToShredBean(dir.toAbsolutePath().toString());
@@ -83,7 +88,6 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
 
         LOGGER.info("visitFile() - Starts.");
         LOGGER.info("file: " + file.toAbsolutePath());
-        filesCount++;
 
         if (!validFilesCountIntegrity(file)) return FileVisitResult.SKIP_SUBTREE;
 
@@ -97,13 +101,17 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
             //  Rename File & Delete It!
             handleRenameAndDeleteFile(fileToShredBean);
 
+            filesShreddedCount++;
+            totalSize += attrs.size();
+//            totalSize += fileToShredBean.getFile().length();
+
         } catch (NoSuchFileException x) {
             LOGGER.error("No Such File Found. File: " + file.toAbsolutePath());
         } catch (IOException e) {
             LOGGER.error("visitFile() - ERROR: " + e.getMessage() + "\nFailed to Shred File: " + file.toAbsolutePath());
         } finally {
 
-            LOGGER.error("visitFile() - After Exceptions, executing Finally Block.");
+            LOGGER.info("visitFile() - After Exceptions, executing Finally Block.");
 
             String strCurrentFilePath = file.toAbsolutePath().toString();
             FileToShredBean fileToShredBean = FileToShredBeanFactory.getFileToShredBean(strCurrentFilePath, true);
@@ -136,6 +144,8 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
         if (!validFilesCountIntegrity(dir)) return FileVisitResult.SKIP_SUBTREE;
 
         handleRenameAndDeleteFile(FileToShredBeanFactory.getFileToShredBean(dir.toAbsolutePath().toString()));
+
+        dirsCount++;
         return FileVisitResult.CONTINUE;
     }
 
@@ -230,4 +240,11 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
 
     }*/
 
+    public long getFilesShreddedCount() {
+        return filesShreddedCount;
+    }
+
+    public long getTotalSize() {
+        return totalSize;
+    }
 }

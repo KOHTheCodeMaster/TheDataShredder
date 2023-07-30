@@ -5,14 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="89c8e4cc-cadd-4abd-b6c4-8de5df84fbe6" name="Changes" comment="4th Commit - Shredding Single File">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/bean/FileStatusFlagBean.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/DirTreeWalker.java" afterDir="false" />
+      <changelist_data name="Harshit Gupta" email="kohthecodemaster@gmail.com" />
       <change afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/TheDataShredder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/A/1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/A/2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/A/A1/1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/A/A1/2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/A/A2/1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/A/A2/2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/B/1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/B/2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/B/A1/1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/B/A1/2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/B/A2/1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/B/A2/2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/C/1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/C/2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/C/A1/1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/C/A1/2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/C/A2/1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/Dummy Data/Z2/C/A2/2.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/bean/FileToShredBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/bean/FileToShredBean.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/service/DataShredderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/service/DataShredderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/FileToShredBeanFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/FileToShredBeanFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/DirTreeWalker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/github/kohthecodemaster/utils/DirTreeWalker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -53,17 +71,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/KOH-Workspace/Dev-Zone/Intellij-Projects/TheDataShredder/src/main/java/com/github/kohthecodemaster&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.import&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "E:/KOH-Workspace/Dev-Zone/Intellij-Projects/TheDataShredder/src/main/resources/Dummy Data",
+    "settings.editor.selected.configurable": "editor.preferences.import"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\KOH-Workspace\Dev-Zone\Intellij-Projects\TheDataShredder\src\main\resources\Dummy Data" />
+      <recent name="E:\KOH-Workspace\Dev-Zone\Intellij-Projects\TheDataShredder\src\main\resources\temp" />
       <recent name="E:\KOH-Workspace\Dev-Zone\Intellij-Projects\TheDataShredder\src\main\java\com\github\kohthecodemaster" />
     </key>
   </component>
