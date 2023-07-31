@@ -27,11 +27,7 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
     int deletedFilesCount;
     boolean shouldDeleteFiles;
 
-    //    List<String> listOfFilesFailedToShred = new ArrayList<>();  //  Both Files & Dirs
-//    List<String> listOfFilesShredded = new ArrayList<>();
     List<FileToShredBean> fileToShredBeanList;
-
-    //    FileToShredBean fileToShredBean;
     Consumer<FileToShredBean> fileToShredBeanConsumer;
 
     public DirTreeWalker(Consumer<FileToShredBean> fileToShredBeanConsumer, boolean shouldDeleteFiles, long origFileCount, long origTotalSize) {
@@ -96,28 +92,23 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
             String strCurrentFilePath = file.toRealPath(LinkOption.NOFOLLOW_LINKS).toString();
             FileToShredBean fileToShredBean = FileToShredBeanFactory.getFileToShredBean(strCurrentFilePath, true);
 //            fileToShredBean.getFileStatusFlagBean().setFile(file.toFile().isFile());    //  True
-            fileToShredBeanConsumer.accept(fileToShredBean);
 
-            //  Rename File & Delete It!
-            handleRenameAndDeleteFile(fileToShredBean);
+            fileToShredBeanConsumer.accept(fileToShredBean);
+            handleDeleteOrRenameShreddedFile(fileToShredBean);
 
             filesShreddedCount++;
             totalSize += attrs.size();
 //            totalSize += fileToShredBean.getFile().length();
-
-        } catch (NoSuchFileException x) {
-            LOGGER.error("No Such File Found. File: " + file.toAbsolutePath());
-        } catch (IOException e) {
-            LOGGER.error("visitFile() - ERROR: " + e.getMessage() + "\nFailed to Shred File: " + file.toAbsolutePath());
-        } finally {
-
-            LOGGER.info("visitFile() - After Exceptions, executing Finally Block.");
-
-            String strCurrentFilePath = file.toAbsolutePath().toString();
-            FileToShredBean fileToShredBean = FileToShredBeanFactory.getFileToShredBean(strCurrentFilePath, true);
-//            fileToShredBean.getFileStatusFlagBean().setFile(file.toFile().isFile());    //  True
-//            fileToShredBean.getFileStatusFlagBean().setInvalidFilePath(true);
             fileToShredBeanList.add(fileToShredBean);
+
+        } catch (IOException e) {
+
+            LOGGER.error("visitFile() - ERROR: " + e.getMessage() + "\nFailed to Shred File: " + file.toAbsolutePath());
+
+            FileToShredBean tempFileToShredBean = FileToShredBeanFactory.getFileToShredBean(file.toAbsolutePath().toString());
+            tempFileToShredBean.getFileStatusFlagBean().setInvalidFilePath(true);
+
+            fileToShredBeanList.add(tempFileToShredBean);
 
         }
 
@@ -143,13 +134,13 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
 
         if (!validFilesCountIntegrity(dir)) return FileVisitResult.SKIP_SUBTREE;
 
-        handleRenameAndDeleteFile(FileToShredBeanFactory.getFileToShredBean(dir.toAbsolutePath().toString()));
+        handleDeleteOrRenameShreddedFile(FileToShredBeanFactory.getFileToShredBean(dir.toAbsolutePath().toString()));
 
         dirsCount++;
         return FileVisitResult.CONTINUE;
     }
 
-    private void handleRenameAndDeleteFile(FileToShredBean fileToShredBean) {
+    private void handleDeleteOrRenameShreddedFile(FileToShredBean fileToShredBean) {
 
         LOGGER.info("handleRenameAndDeleteFile() - Starts.");
 
@@ -166,10 +157,8 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
 
         boolean hasDeleted = KOHFilesUtil.deleteFileNow(fileToShredBean.getFile());
 
-        if (hasDeleted) {
-            deletedFilesCount++;
-            fileToShredBeanList.add(fileToShredBean);
-        } else {
+        if (hasDeleted) deletedFilesCount++;
+        else {
             failureCount++;
             fileToShredBean.getFileStatusFlagBean().setFailedToDelete(true);
             LOGGER.error("deleteShreddedFile() - Unable to Delete Shredded File : " +
@@ -191,8 +180,7 @@ public class DirTreeWalker extends SimpleFileVisitor<Path> {
 
         boolean hasRenamed = KOHFilesUtil.renameFileNameToStr(fileToShredBean.getFile(), shreddedFileName);
 
-        if (hasRenamed) fileToShredBeanList.add(fileToShredBean);
-        else {
+        if (!hasRenamed) {
             failureCount++;
             fileToShredBean.getFileStatusFlagBean().setFailedToRename(true);
             LOGGER.error("renameShreddedFile() - Unable to Rename Shredded File : " +

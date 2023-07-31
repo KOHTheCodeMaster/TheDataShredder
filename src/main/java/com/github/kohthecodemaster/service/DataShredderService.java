@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
-import java.util.function.Consumer;
 
 @Service
 public class DataShredderService {
@@ -24,6 +23,7 @@ public class DataShredderService {
     private final int bufferLength;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DataShredderService.class);
+    private DirTreeWalker dirTreeWalker;
 
     @Autowired
     public DataShredderService(AppProperties appProperties) {
@@ -199,10 +199,9 @@ public class DataShredderService {
             long origTotalSize = dirFilesCounter.getTotalSize();
             LOGGER.info("origFileCount: " + origFileCount);
 
-            Consumer<FileToShredBean> fileToShredBeanConsumer = this::processSingleFile;
-
-            DirTreeWalker dirTreeWalker = new DirTreeWalker(
-                    fileToShredBeanConsumer,
+            // TODO: 31-07-2023 - Initialize DirTreeWalker in Constructor or Init separately.
+            dirTreeWalker = new DirTreeWalker(
+                    this::processSingleFile,
                     appProperties.isFlagDeleteFilesAfterShredding(),
                     origFileCount,
                     origTotalSize);
